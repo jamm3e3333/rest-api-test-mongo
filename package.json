@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
-    "start": "node ./src/idex.js"
+    "start": "node ./src/idex.js",
+    "dev": "env-cmd ./config/dev.env nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +23,8 @@
     "path": "^0.12.7",
     "sharp": "^0.28.1",
     "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "env-cmd": "^8.0.2"
   }
 }
