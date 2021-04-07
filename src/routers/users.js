@@ -10,7 +10,7 @@ const router = new express.Router();
 
 router.post('/users/create', async(req, res) => {
     const user = new User(req.body);
-    const temp = 'http://localhost:3053/users/verify/';
+    const temp = `${process.env.URL}/users/verify/`;
     try{
         if(!user){
             return res.status(404)
