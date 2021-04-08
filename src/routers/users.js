@@ -9,7 +9,13 @@ const emailSend = require('../email/email.js');
 const router = new express.Router();
 
 router.post('/users/create', async(req, res) => {
-    const user = new User(req.body);
+    let user;
+    try{
+        user = new User(req.body);
+    }
+    catch(e){
+        return res.status(400).send({Error: e.message});
+    }
     try{
         const temp = process.env.URL;
         if(!user){
