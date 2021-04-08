@@ -9,15 +9,14 @@ const emailSend = require('../email/email.js');
 const router = new express.Router();
 
 router.post('/users/create', async(req, res) => {
-    const user = new User(req.body);
-    const temp = 'http://localhost:3053/users/verify/';
     try{
+        const user = new User(req.body);
+        const temp = process.env.URL;
         if(!user){
             return res.status(404)
                 .send();
                 
         }
-
         await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async (err, status) => {
             if(err){
                 return res.status(400)
@@ -37,9 +36,8 @@ router.post('/users/create', async(req, res) => {
 })
 
 router.post('/users/verification', async (req, res) => {
-    console.log(req.body._id);
-    const user = await User.findOne({_id: req.body._id});
     try{
+        const user = await User.findOne({_id: req.body._id});
         if(!user){
             return res.status(400)
                 .send("Verification failed!");
