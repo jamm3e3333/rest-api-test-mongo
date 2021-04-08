@@ -50,6 +50,10 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    verification: {
+        type: Boolean,
+        default: false
+    },
     avatar:{
         type: Buffer,
         required: false

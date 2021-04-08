@@ -35,6 +35,12 @@ router.post('/users/create', async(req, res) => {
     }
 })
 
+router.get('/users/verify/:id', (req, res) => {
+    res.render('index', {
+        idVer: req.params.id
+    })
+})
+
 router.post('/users/verification', async (req, res) => {
     try{
         const user = await User.findOne({_id: req.body._id});
