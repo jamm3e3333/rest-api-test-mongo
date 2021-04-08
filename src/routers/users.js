@@ -11,14 +11,13 @@ const router = new express.Router();
 router.post('/users/create', async(req, res) => {
     try{
         const user = new User(req.body);
-        const temp = `${process.env.URL}/users/verify/`;
         if(!user){
             return res.status(404)
                 .send();
                 
         }
 
-        await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async (err, status) => {
+        await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here", async (err, status) => {
             if(err){
                 return res.status(400)
                             .send("Email is not reachable.");
@@ -36,32 +35,9 @@ router.post('/users/create', async(req, res) => {
     }
 })
 
-router.post('/users/verification', async (req, res) => {
-    console.log(req.body._id);
-    const user = await User.findOne({_id: req.body._id});
-    try{
-        if(!user){
-            return res.status(400)
-                .send("Verification failed!");
-        }
-        user.verification = true;
-        await user.save();
-        res.status(200)
-            .send(user);
-    }
-    catch(e){
-        res.status(400)
-            .send({Error: e.message});
-    }
-})
-
 router.post('/users/login', async(req, res) => {
     try{
         const user = await User.findByCredentials(req.body.email, req.body.password);
-        if(!user.verification){
-            return res.status(400)
-                .send("User not verified.");
-        }
         const token = await user.generateAuthToken();
         res.status(200)
             .send({user, token});
@@ -159,13 +135,6 @@ router.patch('/users/update/me', auth, async (req, res) => {
             .send({Error: e.message});
     }
 })
-
-router.get('/users/verify/:id', (req,res) => {
-    res.render('index',{
-        id: req.params.id
-    })
-})
-
 
 router.get('/users/me', auth, async(req, res) => {
     try{
