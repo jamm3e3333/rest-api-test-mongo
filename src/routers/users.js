@@ -11,13 +11,13 @@ const router = new express.Router();
 router.post('/users/create', async(req, res) => {
     try{
         const user = new User(req.body);
+        const temp = process.env.URL;
         if(!user){
             return res.status(404)
                 .send();
                 
         }
-
-        await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here", async (err, status) => {
+        await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async (err, status) => {
             if(err){
                 return res.status(400)
                             .send("Email is not reachable.");
@@ -28,6 +28,24 @@ router.post('/users/create', async(req, res) => {
             res.status(201)
                 .send({user, token, status});
         });
+    }
+    catch(e){
+        res.status(400)
+            .send({Error: e.message});
+    }
+})
+
+router.post('/users/verification', async (req, res) => {
+    try{
+        const user = await User.findOne({_id: req.body._id});
+        if(!user){
+            return res.status(400)
+                .send("Verification failed!");
+        }
+        user.verification = true;
+        await user.save();
+        res.status(200)
+            .send(user);
     }
     catch(e){
         res.status(400)
