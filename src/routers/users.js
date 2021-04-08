@@ -9,30 +9,20 @@ const emailSend = require('../email/email.js');
 const router = new express.Router();
 
 router.post('/users/create', async(req, res) => {
-    let user;
+    const user = new User(req.body);
     try{
-        user = new User(req.body);
-    }
-    catch(e){
-        return res.status(400).send({Error: e.message});
-    }
-    try{
-        const temp = process.env.URL;
-        if(!user){
-            return res.status(404)
-                .send();
-                
-        }
-        await emailSend(user.email.toString(), "Welcome", "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async (err, status) => {
-            if(err){
-                return res.status(400)
-                            .send("Email is not reachable.");
-            }
-            console.log(status);
-            await user.save();
-            const token = await user.generateAuthToken();
+        await user.save();
+        const token = await user.generateAuthToken();
             res.status(201)
-                .send({user, token, status});
+                .send({user, token});
+        const temp = process.env.URL;  
+        emailSend(user.email.toString(), `Welcome ${user.nick.toString()}`, "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async(err, status) => {
+            if(err){
+                console.log("Email is not reachable.");
+            }
+            else {
+                console.log(status);
+            }
         });
     }
     catch(e){

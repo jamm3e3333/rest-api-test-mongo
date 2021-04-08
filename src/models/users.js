@@ -7,8 +7,8 @@ const Task = require('./tasks.js');
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true,
         unique: true,
+        required: true,
         trim: true,
         lowercase: true,
         validate(value){
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         validate(value){
             if(value.length < 6){
-                throw new Error("Password must be lenght 6 or greated.");
+                throw new Error("Password must be length 6 or greater.");
             }
             else if(value.toLowerCase().includes('password')){
                 throw new Error("Password cannot contain the word \"password\"");
@@ -32,9 +32,9 @@ const userSchema = new mongoose.Schema({
     },
     nick: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
-        unique: true,
         validate(value){
             if(value.length < 3){
                 throw new Error("Nick name must have at least 3 characters.");
