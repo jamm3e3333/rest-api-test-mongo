@@ -4,7 +4,7 @@ const transporter = mail.createTransport({
     service: "gmail",
     auth: {
         user: "nodemailer3333e3@gmail.com",
-        pass: "V2t5kovice"
+        pass: process.env.EMAIL_PASS
     }
 });
 
