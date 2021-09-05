@@ -3,14 +3,14 @@ const mail = require('nodemailer');
 const transporter = mail.createTransport({
     service: "gmail",
     auth: {
-        user: "nodemailer3333e3@gmail.com",
+        user: process.env.EMAIL_ID,
         pass: process.env.EMAIL_PASS
     }
 });
 
 const emailSend = (to, subject, text, cb) => {
     transporter.sendMail({
-        from: "nodemailer3333e3@gmail.com",
+        from: process.env.EMAIL_ID,
         to: to,
         subject: subject,
         text: text

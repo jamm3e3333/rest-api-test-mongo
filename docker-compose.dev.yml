@@ -2,7 +2,7 @@ version: "3"
 
 services:
 
-    server:
+    api:
         volumes:
             - ./server/:/src
             - /src/node_modules

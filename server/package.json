@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "dev": "env-cmd ./config/dev.env nodemon ./src/index.js",
+    "dev": "env-cmd -f ./config/.env nodemon ./src/index.js",
     "test": "env-cmd ./config/test.env jest --watch"
   },
   "jest": {
@@ -29,7 +29,7 @@
     "validator": "^13.5.2"
   },
   "devDependencies": {
-    "env-cmd": "^8.0.2",
+    "env-cmd": "^10.1.0",
     "jest": "^26.6.3",
     "nodemon": "^2.0.12",
     "supertest": "^6.1.3"
