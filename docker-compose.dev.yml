@@ -4,6 +4,6 @@ services:
 
     api:
         volumes:
-            - ./server/:/src
-            - /src/node_modules
+            - ./server/:/src #bindmount - syncs data from the local storage to the container folder
+            - /src/node_modules #anonymous volume - path in the container
         command: npm run dev

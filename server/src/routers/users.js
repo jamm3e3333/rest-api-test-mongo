@@ -15,8 +15,8 @@ router.post('/users/create', async(req, res) => {
         const token = await user.generateAuthToken();
             res.status(201)
                 .send({user, token});
-        const temp = process.env.URL;  
-        emailSend(user.email.toString(), `Welcome ${user.nick.toString()}`, "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here. \nHere you can click to verify your account: " + temp + user._id, async(err, status) => {
+        const temp = process.env.URL_VER;  
+        emailSend(user.email.toString(), `Welcome ${user.nick.toString()}`, "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here.", async(err, status) => {
             if(err){
                 console.log("Email is not reachable.");
             }
@@ -24,30 +24,6 @@ router.post('/users/create', async(req, res) => {
                 console.log(status);
             }
         });
-    }
-    catch(e){
-        res.status(400)
-            .send({Error: e.message});
-    }
-})
-
-router.get('/users/verify/:id', (req, res) => {
-    res.render('index', {
-        idVer: req.params.id
-    })
-})
-
-router.post('/users/verification', async (req, res) => {
-    try{
-        const user = await User.findOne({_id: req.body._id});
-        if(!user){
-            return res.status(400)
-                .send("Verification failed!");
-        }
-        user.verification = true;
-        await user.save();
-        res.status(200)
-            .send(user);
     }
     catch(e){
         res.status(400)

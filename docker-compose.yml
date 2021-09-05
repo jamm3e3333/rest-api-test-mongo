@@ -8,13 +8,15 @@ services:
         volumes: 
             - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
         depends_on: 
-            - api
             - mongo
+            - api
 
     api:
         build:
             dockerfile: Dockerfile
             context: ./server
+        depends_on:
+            - mongo
 
     mongo:
         image: mongo
@@ -24,8 +26,9 @@ services:
             - MONGO_INITDB_ROOT_USERNAME=jamm3e3333
             - MONGO_INITDB_ROOT_PASSWORD=ahoj123
         volumes:
-            - mongo-db:/data/db
+            - mongo-db:/data/db #named volume - must have declaration
 
+# list of all named volumes              
 volumes:
     mongo-db:
         
