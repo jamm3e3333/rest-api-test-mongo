@@ -15,7 +15,6 @@ router.post('/users/create', async(req, res) => {
         const token = await user.generateAuthToken();
             res.status(201)
                 .send({user, token});
-        const temp = process.env.URL_VER;  
         emailSend(user.email.toString(), `Welcome ${user.nick.toString()}`, "Welcome to the task server made by Jakub Vala.\nEnjoy your stay here.", async(err, status) => {
             if(err){
                 console.log("Email is not reachable.");
@@ -145,6 +144,10 @@ router.get('/users/me', auth, async(req, res) => {
 
 router.get('/users/me/avatar', auth, async(req, res) => {
     try{
+        if(!req.user.avatar) {
+            return res.status(404)
+                        .send('This user doesn\'t have an avatar.')
+        }
        res.status(200)
             .send(req.user.avatar);
     }
@@ -155,16 +158,18 @@ router.get('/users/me/avatar', auth, async(req, res) => {
 })
 
 router.delete('/users/delete', auth, async(req, res) => {
-    await emailSend(req.user.email.toString(), "GoodBye", "Thanks for using our service.", (err, status) => {
-        if(err){
-            console.log("Email was not sent.");
-        }
-        else{
-            console.log("Email was sent",status);
-        }
-    });
     try{
         await req.user.remove();
+
+        await emailSend(req.user.email.toString(), "GoodBye", "Thanks for using our service.", (err, status) => {
+            if(err){
+                console.log("Email was not sent.");
+            }
+            else{
+                console.log("Email was sent",status);
+            }
+        });
+        
         res.status(200)
             .send("User deleted");
     }
