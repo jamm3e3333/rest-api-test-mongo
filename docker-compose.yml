@@ -1,21 +1,12 @@
 version: "3"
 
 services: 
-    nginx:
-        build:
-            dockerfile: Dockerfile
-            context: ./nginx
-        restart: always
-        ports:
-            - "80:80"
-        depends_on: 
-            - mongo
-            - api
-
     api:
         build:
             dockerfile: Dockerfile
             context: ./server
+        ports:
+            - "3010:3010"
         depends_on:
             - mongo
 
