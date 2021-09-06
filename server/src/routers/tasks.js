@@ -1,7 +1,6 @@
 const express = require('express');
 const router = new express.Router();
 const auth = require('../middleware/auth.js');
-const { findByIdAndRemove } = require('../models/tasks.js');
 const Task = require('../models/tasks.js');
 
 router.post('/tasks/create', auth, async(req, res) => {
@@ -53,6 +52,27 @@ router.get('/tasks', auth, async(req, res) => {
     catch(e){
         res.status(400)
             .send({Error: e.message});
+    }
+})
+
+router.get('/task/:id', auth, async (req, res) => {
+    const id = req.params.id;
+    if(!id) {
+        res.status(404)
+            .send({msg: 'Task not found.'});
+    }
+    try {
+        const task = await Task.findOne({_id: id, owner: req.user._id});
+        if(!task) {
+            return res.status(400)
+                        .send({msg: `Task with id ${id} not found.`})
+        }
+        res.status(200)
+            .send(task);
+    }
+    catch(e) {
+        res.status(400)
+            .send(e);
     }
 })
 

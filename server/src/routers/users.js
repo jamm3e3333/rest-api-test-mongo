@@ -176,6 +176,10 @@ router.delete('/users/delete', auth, async(req, res) => {
 
 router.delete('/users/me/avatar/delete', auth, async(req, res) => {
     try{
+        if(!req.user.avatar) {
+            return res.status(404)
+                    .send('User doesn\'t have an avatar');
+        }
         req.user.avatar = undefined;
         await req.user.save();
         res.status(200)
