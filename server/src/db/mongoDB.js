@@ -7,6 +7,8 @@ const {
 } = require('../../config/config');
 
 mongoose.connect(`mongodb://${mongoUser}:${mongoPass}@${mongoIP}:${mongoPort}/?authSource=admin`, {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
-    useNewUrlParser: true
+    useFindAndModify: false,
+    useCreateIndex: true
 });
