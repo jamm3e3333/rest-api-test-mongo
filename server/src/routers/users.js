@@ -9,8 +9,8 @@ const emailSend = require('../email/email.js');
 const router = new express.Router();
 
 router.post('/users/create', async(req, res) => {
-    const user = new User(req.body);
     try{
+        const user = new User(req.body);
         await user.save();
         const token = await user.generateAuthToken();
             res.status(201)
